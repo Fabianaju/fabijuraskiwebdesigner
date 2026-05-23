@@ -9,9 +9,28 @@
 <meta property="og:title" content="Fabi Juraski — Web Designer Premium">
 <meta property="og:description" content="Experiências digitais com alma de editorial. Landing pages e identidades visuais exclusivas.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://www.fabijuraski.com"> <meta property="og:image" content="https://www.fabijuraski.com/og-image.jpg"> <link rel="preconnect" href="https://fonts.googleapis.com">
+<meta property="og:url" content="https://www.fabijuraski.com"> 
+<meta property="og:image" content="https://github.com/Fabianaju/fabijuraskiwebdesigner/raw/main/web2.jpeg"> 
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Founders+Grotesk:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,300&display=swap" rel="stylesheet">
+
+<style>
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+  .lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis-smooth [data-lenis-prevent] {
+    scroll-behavior: contain;
+  }
+  .lenis-smooth iframe {
+    pointer-events: none;
+  }
+</style>
+
 <style>
   :root {
     --cream: #F5F0E8;
@@ -28,8 +47,6 @@
 
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html { scroll-behavior: smooth; }
-
   body {
     background: var(--deep);
     color: var(--cream);
@@ -37,10 +54,9 @@
     font-weight: 300;
     letter-spacing: 0.02em;
     overflow-x: hidden;
-    cursor: none; /* Oculta o cursor padrão no desktop */
+    cursor: none;
   }
 
-  /* Melhora a acessibilidade ao navegar via teclado (Tab) */
   a:focus-visible, button:focus-visible {
     outline: 1px dashed var(--gold);
     outline-offset: 4px;
@@ -70,7 +86,6 @@
   body.cursor-hover #cursor { width: 6px; height: 6px; background: var(--gold-light); }
   body.cursor-hover #cursor-ring { width: 60px; height: 60px; border-color: var(--gold); }
 
-  /* Desativa o cursor customizado em dispositivos móveis/táteis */
   @media (hover: none) and (pointer: coarse) {
     body { cursor: auto; }
     #cursor, #cursor-ring { display: none !important; }
@@ -145,7 +160,7 @@
     opacity: 0.6;
   }
 
-  /* ── HERO ────────────────────────────────────────── */
+  /* ── HERO & TEXT MASKING ─────────────────────────── */
   #hero {
     position: relative;
     height: 100vh;
@@ -175,21 +190,31 @@
     transform: translateY(20px);
     animation: fadeUp 1s 0.5s forwards ease;
   }
+  
+  /* Text Masking Containers */
+  .hero-title-line {
+    overflow: hidden;
+    line-height: 0.95;
+  }
   .hero-title {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
     font-size: clamp(5rem, 14vw, 13rem);
-    line-height: 0.88;
     letter-spacing: -0.02em;
     color: var(--cream);
-    margin-bottom: 0.1em;
+    display: inline-block;
+    transform: translateY(100%);
     opacity: 0;
-    animation: fadeUp 1.2s 0.8s forwards cubic-bezier(.16,1,.3,1);
+  }
+  .hero-title-line:nth-child(1) .hero-title {
+    animation: maskRevealUp 1.4s 0.7s forwards cubic-bezier(.16,1,.3,1);
+  }
+  .hero-title-line:nth-child(2) .hero-title {
+    animation: maskRevealUp 1.6s 0.9s forwards cubic-bezier(.16,1,.3,1);
   }
   .hero-title em {
     font-style: italic;
     color: var(--gold-light);
-    display: block;
   }
   .hero-subtitle {
     font-family: 'Founders Grotesk', sans-serif;
@@ -199,7 +224,8 @@
     color: var(--muted);
     margin-top: 2.5rem;
     opacity: 0;
-    animation: fadeUp 1s 1.3s forwards ease;
+    transform: translateY(20px);
+    animation: fadeUp 1s 1.5s forwards ease;
   }
   .hero-scroll-cue {
     position: absolute;
@@ -249,9 +275,6 @@
     background: var(--gold);
     flex-shrink: 0;
   }
-
-  /* ── SECTIONS ────────────────────────────────────── */
-  section { position: relative; z-index: 2; }
 
   /* ── SOBRE ───────────────────────────────────────── */
   #sobre {
@@ -328,13 +351,18 @@
     display: flex; align-items: center; justify-content: center;
     overflow: hidden;
   }
-  .sobre-frame-inner {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 7rem;
-    font-weight: 300;
-    color: rgba(201,169,110,0.06);
-    letter-spacing: -0.05em;
-    user-select: none;
+  .sobre-profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.85;
+    filter: grayscale(20%) sepia(10%) contrast(105%);
+    transition: all 0.6s ease;
+  }
+  .sobre-visual:hover .sobre-profile-img {
+    opacity: 1;
+    filter: grayscale(0%) sepia(0%) contrast(100%);
+    transform: scale(1.02);
   }
   .sobre-frame-tag {
     position: absolute;
@@ -345,6 +373,7 @@
     letter-spacing: 0.3em;
     text-transform: uppercase;
     padding: 0.5rem 1rem;
+    z-index: 2;
   }
   .sobre-accent {
     position: absolute;
@@ -354,12 +383,16 @@
     border: 1px solid rgba(201,169,110,0.1);
     border-radius: 2px;
     pointer-events: none;
+    transition: transform 0.6s ease;
+  }
+  .sobre-visual:hover .sobre-accent {
+    transform: translate(-5px, 5px);
   }
 
-  /* ── SERVIÇOS ────────────────────────────────────── */
+  /* ── SERVIÇOS & CINEMATIC GLARE ──────────────────── */
   #servicos {
     padding: 10rem 4rem;
-    background: rgba(201,169,110,0.02);
+    background: rgba(13,11,9,0.4);
     border-top: 1px solid rgba(201,169,110,0.06);
   }
   .servicos-inner { max-width: 1400px; margin: 0 auto; }
@@ -387,23 +420,28 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 0;
   }
+  
+  /* Glare Card Base */
   .servico-card {
     padding: 3.5rem 3rem;
     border: 1px solid rgba(201,169,110,0.08);
-    border-radius: 0;
     position: relative;
     overflow: hidden;
-    transition: background 0.5s ease;
+    background: transparent;
     cursor: default;
   }
+  /* O gradiente radial será gerenciado dinamicamente via variável CSS '--x' e '--y' */
   .servico-card::before {
     content: '';
     position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,169,110,0.06) 0%, transparent 70%);
+    background: radial-gradient(circle 250px at var(--x, 50%) var(--y, 50%), rgba(201, 169, 110, 0.09), transparent 80%);
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
   }
   .servico-card:hover::before { opacity: 1; }
+  
   .servico-number {
     font-family: 'Cormorant Garamond', serif;
     font-size: 3.5rem;
@@ -412,6 +450,7 @@
     line-height: 1;
     margin-bottom: 1.5rem;
     transition: color 0.4s ease;
+    position: relative; z-index: 2;
   }
   .servico-card:hover .servico-number { color: rgba(201,169,110,0.25); }
   .servico-title {
@@ -420,17 +459,20 @@
     font-weight: 400;
     color: var(--cream);
     margin-bottom: 1rem;
+    position: relative; z-index: 2;
   }
   .servico-desc {
     font-size: 0.85rem;
     line-height: 1.9;
     color: var(--muted);
     transition: color 0.4s ease;
+    position: relative; z-index: 2;
   }
   .servico-card:hover .servico-desc { color: var(--text-light); }
   .servico-tags {
     margin-top: 2rem;
     display: flex; flex-wrap: wrap; gap: 0.5rem;
+    position: relative; z-index: 2;
   }
   .tag {
     font-size: 0.55rem;
@@ -439,7 +481,6 @@
     color: var(--gold);
     border: 1px solid rgba(201,169,110,0.2);
     padding: 0.3rem 0.8rem;
-    border-radius: 0;
     transition: all 0.3s ease;
   }
   .servico-card:hover .tag { border-color: rgba(201,169,110,0.4); }
@@ -492,16 +533,12 @@
   }
   .portfolio-item-inner {
     aspect-ratio: 4/3;
-    background: rgba(201,169,110,0.04);
+    background: rgba(13,11,9,0.4);
     position: relative;
     overflow: hidden;
     transition: transform 0.6s cubic-bezier(.16,1,.3,1);
-    
-    /* Configuração para Imagem de Fundo Real */
     background-size: cover;
     background-position: center;
-    /* Para adicionar os seus mockups futuros, basta fazer no CSS/HTML de cada item: 
-       background-image: url('caminho-da-sua-imagem.jpg'); */
   }
   .portfolio-item:hover .portfolio-item-inner { transform: scale(1.03); }
   .portfolio-mockup {
@@ -522,14 +559,25 @@
       linear-gradient(rgba(201,169,110,0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(201,169,110,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
+    z-index: 1;
   }
+  .portfolio-img-layer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.9;
+    transition: opacity 0.4s ease;
+  }
+  .portfolio-item:hover .portfolio-img-layer { opacity: 1; }
   .portfolio-overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(13,11,9,0.95) 0%, rgba(13,11,9,0.4) 100%);
+    background: linear-gradient(to top, rgba(13,11,9,0.95) 0%, rgba(13,11,9,0.3) 100%);
     opacity: 0;
     transition: opacity 0.5s ease;
     display: flex; align-items: flex-end;
     padding: 2rem;
+    z-index: 2;
   }
   .portfolio-item:hover .portfolio-overlay { opacity: 1; }
   .portfolio-overlay-link {
@@ -794,6 +842,10 @@
   @keyframes fadeUp {
     to { opacity: 1; transform: translateY(0); }
   }
+  @keyframes maskRevealUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0%); opacity: 1; }
+  }
   @keyframes scrollPulse {
     0%,100% { opacity: 0.4; transform: scaleY(1); }
     50% { opacity: 1; transform: scaleY(1.2); }
@@ -810,13 +862,7 @@
     0%,100% { width: 30px; opacity: 0.5; }
     50% { width: 50px; opacity: 1; }
   }
-  @keyframes float {
-    0%,100% { transform: translateY(0px) rotate(0deg); }
-    33% { transform: translateY(-8px) rotate(1deg); }
-    66% { transform: translateY(-4px) rotate(-0.5deg); }
-  }
 
-  /* ── GLASS CARDS ─────────────────────────────────── */
   .glass {
     background: var(--glass);
     border: 1px solid var(--glass-border);
@@ -859,10 +905,14 @@
   <div class="hero-bg-gradient"></div>
   <div class="hero-content" id="hero-parallax">
     <p class="hero-eyebrow">Web Designer · Direção de Arte Digital</p>
-    <h1 class="hero-title">
-      Fabi<br>
-      <em>Juraski</em>
-    </h1>
+    <div class="hero-title-grid">
+      <div class="hero-title-line">
+        <h1 class="hero-title">Fabi</h1>
+      </div>
+      <div class="hero-title-line">
+        <h1 class="hero-title"><em>Juraski</em></h1>
+      </div>
+    </div>
     <p class="hero-subtitle">Experiências digitais com alma de editorial</p>
   </div>
   <div class="hero-scroll-cue">
@@ -919,9 +969,10 @@
       </div>
     </div>
   </div>
+  
   <div class="sobre-visual reveal reveal-delay-2">
     <div class="sobre-frame">
-      <div class="sobre-frame-inner" style="animation: float 6s ease-in-out infinite;">FJ</div>
+      <img src="https://github.com/Fabianaju/fabijuraskiwebdesigner/raw/main/web2.jpeg" alt="Fabi Juraski" class="sobre-profile-img">
       <div class="sobre-frame-tag">Est. 2019</div>
     </div>
     <div class="sobre-accent"></div>
@@ -937,7 +988,7 @@
       </div>
     </div>
     <div class="servicos-grid">
-      <div class="servico-card reveal">
+      <div class="servico-card reveal glare-card">
         <div class="servico-number">01</div>
         <h3 class="servico-title">Landing Pages Premium</h3>
         <p class="servico-desc">Páginas de alta conversão com design editorial. Cada elemento pensado para guiar, envolver e converter com elegância.</p>
@@ -947,7 +998,7 @@
           <span class="tag">Responsivo</span>
         </div>
       </div>
-      <div class="servico-card reveal reveal-delay-1">
+      <div class="servico-card reveal reveal-delay-1 glare-card">
         <div class="servico-number">02</div>
         <h3 class="servico-title">Sites Institucionais</h3>
         <p class="servico-desc">Presença digital que comunica autoridade. Design exclusivo que diferencia marcas em mercados saturados.</p>
@@ -957,7 +1008,7 @@
           <span class="tag">Custom</span>
         </div>
       </div>
-      <div class="servico-card reveal reveal-delay-2">
+      <div class="servico-card reveal reveal-delay-2 glare-card">
         <div class="servico-number">03</div>
         <h3 class="servico-title">Identidade Visual Digital</h3>
         <p class="servico-desc">Sistemas visuais coesos e memoráveis. Da paleta à tipografia, cada detalhe construindo reconhecimento de marca.</p>
@@ -979,6 +1030,20 @@
   </div>
   <div class="portfolio-track-wrapper" id="portfolio-drag">
     <div class="portfolio-track">
+      <div class="portfolio-item">
+        <div class="portfolio-item-inner">
+          <div class="portfolio-mockup-grid"></div>
+          <div class="portfolio-img-layer" style="background-image: url('https://github.com/Fabianaju/fabijuraskiwebdesigner/raw/main/brilho.png');"></div>
+          <div class="portfolio-overlay">
+            <a href="#" class="portfolio-overlay-link">Ver projeto</a>
+          </div>
+        </div>
+        <div class="portfolio-meta">
+          <span class="portfolio-tag">Identidade & UX · 2026</span>
+          <h3 class="portfolio-name">Projeto Brilho</h3>
+        </div>
+      </div>
+      
       <div class="portfolio-item">
         <div class="portfolio-item-inner">
           <div class="portfolio-mockup-grid"></div>
@@ -1132,11 +1197,45 @@
   </div>
 </footer>
 
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+
 <script>
-// Indica se o dispositivo possui ecrã tátil (touch)
 const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-// ── CURSOR CUSTOMIZADO (Apenas para Desktop) ───────────────────
+// ── INICIALIZAÇÃO DO LENIS SMOOTH SCROLL ────────────────
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+  direction: 'vertical',
+  gestureDirection: 'vertical',
+  smooth: true,
+  mouseMultiplier: 1,
+  smoothTouch: false,
+  touchMultiplier: 2,
+  infinite: false,
+});
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+// Integração do Lenis com links internos/âncoras
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href');
+    if (targetId === '#') return;
+    const target = document.querySelector(targetId);
+    if (target) {
+      lenis.scrollTo(target, { offset: 0, duration: 1.4 });
+    }
+  });
+});
+
+
+// ── CURSOR CUSTOMIZADO ───────────────────────────────
 const cursor = document.getElementById('cursor');
 const cursorRing = document.getElementById('cursor-ring');
 let mouseX = 0, mouseY = 0;
@@ -1158,17 +1257,31 @@ if (!isTouchDevice) {
     requestAnimationFrame(animateRing);
   })();
 
-  document.querySelectorAll('a, button, .portfolio-item, .servico-card').forEach(el => {
+  document.querySelectorAll('a, button, .portfolio-item, .servico-card, .sobre-visual').forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
   });
 }
 
-// ── PARTICLE CANVAS (Com Economia de Performance) ──────────────
+// ── CINEMATIC GLARE EFFECT (Luz nos Cards de Serviço) ──
+const glareCards = document.querySelectorAll('.glare-card');
+glareCards.forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left; // Coordenada X dentro do card
+    const y = e.clientY - rect.top;  // Coordenada Y dentro do card
+    
+    // Atualiza as variáveis CSS nativas no escopo deste card
+    card.style.setProperty('--x', `${x}px`);
+    card.style.setProperty('--y', `${y}px`);
+  });
+});
+
+
+// ── PARTICLE CANVAS ──────────────────────────────────
 const canvas = document.getElementById('hero-canvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
-let animFrame;
 let mx = window.innerWidth / 2, my = window.innerHeight / 2;
 let isHeroVisible = true;
 
@@ -1237,27 +1350,23 @@ function drawConnections() {
 for (let i = 0; i < 120; i++) particles.push(new Particle());
 
 function animateCanvas() {
-  // Só processa e desenha se o Hero estiver visível no ecrã
   if (isHeroVisible) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach(p => { p.update(); p.draw(); });
     drawConnections();
   }
-  animFrame = requestAnimationFrame(animateCanvas);
+  requestAnimationFrame(animateCanvas);
 }
 animateCanvas();
 
-// Observer para pausar o Canvas fora de ecrã (Performance e Bateria)
 const heroSection = document.getElementById('hero');
 const heroObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    isHeroVisible = entry.isIntersecting;
-  });
+  entries.forEach(entry => { isHeroVisible = entry.isIntersecting; });
 }, { threshold: 0.01 });
 if(heroSection) heroObserver.observe(heroSection);
 
 
-// ── HERO PARALLAX ────────────────────────────────────────
+// ── HERO PARALLAX ────────────────────────────────────
 const heroParallax = document.getElementById('hero-parallax');
 if (!isTouchDevice) {
   document.addEventListener('mousemove', e => {
@@ -1270,13 +1379,13 @@ if (!isTouchDevice) {
   });
 }
 
-// ── NAV SCROLL ───────────────────────────────────────────
+// ── NAV SCROLL ───────────────────────────────────────
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 50);
 });
 
-// ── REVEAL ON SCROLL ─────────────────────────────────────
+// ── REVEAL ON SCROLL ──────────────────────────────────
 const revealElements = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -1288,7 +1397,7 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 revealElements.forEach(el => observer.observe(el));
 
-// ── PORTFOLIO DRAG SCROLL ────────────────────────────────
+// ── PORTFOLIO DRAG SCROLL ─────────────────────────────
 const dragWrapper = document.getElementById('portfolio-drag');
 let isDown = false, startX, scrollLeft;
 dragWrapper.addEventListener('mousedown', e => {
@@ -1307,7 +1416,7 @@ dragWrapper.addEventListener('mousemove', e => {
   dragWrapper.scrollLeft = scrollLeft - walk;
 });
 
-// ── MAGNETIC BUTTONS (Apenas para desktop) ───────────────────
+// ── MAGNETIC BUTTONS ─────────────────────────────────
 if (!isTouchDevice) {
   document.querySelectorAll('.magnetic').forEach(btn => {
     btn.addEventListener('mousemove', e => {
@@ -1323,17 +1432,6 @@ if (!isTouchDevice) {
     });
   });
 }
-
-// ── SMOOTH SCROLL ────────────────────────────────────────
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
 </script>
 </body>
 </html>
